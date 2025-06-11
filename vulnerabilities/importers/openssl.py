@@ -78,7 +78,8 @@ def to_advisory_data(xml_issue) -> AdvisoryData:
 
         elif info.tag == "advisory":
             advisory_url = info.attrib["url"]
-            if not advisory_url.startswith("https://web.archive.org"):
+            parsed_url = urlparse(advisory_url)
+            if parsed_url.hostname != "web.archive.org":
                 advisory_url = urljoin("https://www.openssl.org", advisory_url)
 
         elif info.tag == "cve":
