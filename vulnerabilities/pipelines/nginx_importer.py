@@ -185,9 +185,11 @@ def parse_advisory_data_from_paragraph(vulnerability_info):
         elif hasattr(child, "attrs"):
             link = child.attrs.get("href")
             if link:
+                parsed_url = requests.compat.urlparse(link)
+                hostname = parsed_url.hostname
                 if "cve.mitre.org" in link:
                     references.append(Reference(reference_id=text, url=link))
-                elif "mailman.nginx.org" in link:
+                elif hostname and (hostname == "mailman.nginx.org" or hostname.endswith(".mailman.nginx.org")):
                     if advisory_severity:
                         severities = [advisory_severity]
                     else:
